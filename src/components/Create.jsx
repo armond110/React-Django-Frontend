@@ -49,7 +49,7 @@ const Create = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: "Bari",
+      name: "",
       description: "",
       country: "",
       league: "",
@@ -83,11 +83,6 @@ const Create = () => {
         <AddBoxIcon fontSize='large' />
         <Typography sx={{marginLeft: '15', fontWeight: 'bold'}} variant='subtitle2'>Create a new club</Typography>
       </Box>
-
-          {/*<Message 
-            messageText = {'You successfully submitted the data to the database!'}
-            messageColor = {'green'}
-          />*/}
 
           {message}
         <Box className={'FormBox'}>

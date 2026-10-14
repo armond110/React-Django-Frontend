@@ -41,33 +41,8 @@ export default function Menu() {
           <DashboardIcon />
         </ListItemIcon>
         <ListItemText primary="All Clubs" />
-        {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <DashboardCustomizeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Netherlands" />
-          </ListItemButton>
-
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <DashboardCustomizeIcon />
-            </ListItemIcon>
-            <ListItemText primary="India" />
-          </ListItemButton>
-
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemIcon>
-              <DashboardCustomizeIcon />
-            </ListItemIcon>
-            <ListItemText primary="France" />
-          </ListItemButton>
-        </List>
-      </Collapse>
+      
     </List>
 
     <List
@@ -76,7 +51,7 @@ export default function Menu() {
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Creating records
+          Creating clubs
         </ListSubheader>
       }
     >
