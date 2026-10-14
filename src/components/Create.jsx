@@ -6,11 +6,18 @@ import TextForm from './forms/TextForm'
 import SelectForm from './forms/SelectForm'
 import MultiSelectForm from './forms/MultiSelectForm'
 import DescriptionForm from './forms/DescriptionForm'
+import {useFormik} from 'formik'
+import * as yup from 'yup'
+import Message from './forms/Message';
+import {useNavigate} from 'react-router'
+
 
 const Create = () => {
   const [country, setCountry] = useState([])
   const [league, setLeague] = useState([])
   const [characteristic, setCharacteristic] = useState([])
+  const [message, setMessage] = useState([]) 
+  const navigate = useNavigate()
 
   console.log(country)
   console.log(league)
@@ -33,42 +40,86 @@ const Create = () => {
     GetData()
   }, [])
 
+  const validationSchema = yup.object({
+    name: yup.string("The name must be text").required("Name is required"),
+    attendance: yup.number("Attendance must be a number").required("Attendance is present"),
+    characteristic: yup.array().min(1, "Select at least one option"),
+    description: yup.string("The description must be text").required("Description is required"),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      name: "Bari",
+      description: "",
+      country: "",
+      league: "",
+      attendance: "",
+      city: "",
+      characteristic: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => { 
+      AxiosInstance.post('footballclub/', values)
+      .then(() => {
+       setMessage(
+          <Message 
+            messageText = {'You successfully submitted the data to the database!'}
+            messageColor = {'green'}
+          />
+        )
+        setTimeout(()=> {
+           navigate('/')
+        }, 2000)
+      })
+
+    }
+  })
+
   return (
     <div>
+      <form onSubmit="" action={formik.handleSubmit}>
+
       <Box className='TopBar'>
         <AddBoxIcon fontSize='large' />
         <Typography sx={{marginLeft: '15', fontWeight: 'bold'}} variant='subtitle2'>Create a new club</Typography>
       </Box>
 
+          {/*<Message 
+            messageText = {'You successfully submitted the data to the database!'}
+            messageColor = {'green'}
+          />*/}
+
+          {message}
         <Box className={'FormBox'}>
             <Box className={'FormArea'}>
-              <TextForm label={'Club Name'}/>
+              <TextForm label={'Club Name'} name = 'name' value = {formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.name)} helperText= {formik.touched.name && formik.errors.name}/>
               < Box sx={{marginTop: '30px'}}>
-                <TextForm label={'City'}/>
+                <TextForm label={'City'} name = 'city' value = {formik.values.city} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.city)} helperText= {formik.touched.city && formik.errors.city}/>
               </Box>
               < Box sx={{marginTop: '30px'}}>
-                <SelectForm label={'League'} options={league}/>
+                <SelectForm label={'League'} options={league} name = 'league' value = {formik.values.league} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.league)} helperText= {formik.touched.league && formik.errors.league}/>
               </Box>
               <Box sx={{marginTop: '30px'}}>
-                <Button variant="contained" fullWidth>Submit the data</Button>
+                <Button type="submit" variant="contained" fullWidth>Submit the data</Button>
               </Box>
             </Box>
             
             <Box className={'FormArea'}>
-              <SelectForm label={'Country'} options={country}/>
+              <SelectForm label={'Country'} options={country} name = 'country' value = {formik.values.country} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.country)} helperText= {formik.touched.country && formik.errors.country}/>
               <Box sx={{marginTop: '30px'}}>
-                <TextForm label={'Attendance'}/>
+                <TextForm label={'Attendance'} name = 'attendance' value = {formik.values.attendance} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.attendance)} helperText= {formik.touched.attendance && formik.errors.attendance}/>
               </Box>
               <Box sx={{marginTop: '30px'}}>
-                <MultiSelectForm label={'Characteristics'} options={characteristic}/>
+                <MultiSelectForm label={'Characteristics'} options={characteristic} name = 'characteristic' value = {formik.values.characteristic} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.characteristic)} helperText= {formik.touched.characteristic && formik.errors.characteristic}/>
               </Box>
             </Box>
             
             <Box className={'FormArea'}>
-              <DescriptionForm label={'Description'} rows={9}/>
+              <DescriptionForm label={'Description'} rows={9} name='description' value={formik.values.description} onChange={formik.handleChange} onBlur={formik.handleBlur} error = {formik.touched.name && Boolean(formik.errors.description)} helperText= {formik.touched.description && formik.errors.description}/>
             </Box>
             
         </Box>
+        </form>
     </div>
   )
 }
